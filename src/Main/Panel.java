@@ -1,24 +1,36 @@
 package Main;
 
+import Entities.*;
+import World.*;
 import javax.swing.*;
 import java.awt.*;
 
 public class Panel extends JPanel implements Runnable{
-    final double fps = 60;
+    public static final int ScreenWidth = 800, ScreenHeight = 600;
+    final static double fps = 60;
+    public static double FrameTime = (double) 100/fps;
+
+    KeyHandler key = new KeyHandler();
+    Tool playerTool = new Tool();
+    Player player = new Player(this, key, playerTool);
     Panel(){
-        this.setPreferredSize(new Dimension(800, 600));
+        this.setPreferredSize(new Dimension(ScreenWidth, ScreenHeight));
         this.setDoubleBuffered(true);
         this.setFocusable(true);
+        this.addKeyListener(key);
     }
     Thread gameThread;
 
     public void update(){
+        player.update();
+        System.out.println(FrameTime * 10);
     }
 
     public void paint(Graphics gg) {
         super.paint(gg);
         Graphics2D g = (Graphics2D) gg;
-
+        player.draw(g);
+        g.drawString("FPS: " + fps, 10, 10);
         g.dispose();
     }
 
